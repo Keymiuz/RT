@@ -157,6 +157,8 @@
   font-size: 15px;
   outline: none;
   transition: all 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
