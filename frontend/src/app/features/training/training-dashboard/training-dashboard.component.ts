@@ -38,9 +38,9 @@ export class TrainingDashboardComponent implements OnInit {
       map(sessions => sessions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     );
 
-    // Filtra sessões do circuito padrão 5.5km que já foram calculadas pelo backend
+    // Filtra sessões do circuito padrão 5.5km (considera novas calculadas e históricas com distância 5.5km)
     this.standardSessions$ = this.sessions$.pipe(
-      map(sessions => sessions.filter(s => s.isStandardCircuit && s.paceMinKm !== undefined))
+      map(sessions => sessions.filter(s => s.isStandardCircuit || s.distanceKm === 5.5))
     );
 
     // Últimos 5 treinos
@@ -51,9 +51,10 @@ export class TrainingDashboardComponent implements OnInit {
     // Calcula o ritmo médio do circuito de 5.5km
     this.averagePace$ = this.standardSessions$.pipe(
       map(sessions => {
-        if (sessions.length === 0) return 0;
-        const sum = sessions.reduce((acc, s) => acc + (s.paceMinKm || 0), 0);
-        return sum / sessions.length;
+        const standardSessionsWithPace = sessions.filter(s => s.paceMinKm !== undefined && s.paceMinKm > 0);
+        if (standardSessionsWithPace.length === 0) return 0;
+        const sum = standardSessionsWithPace.reduce((acc, s) => acc + (s.paceMinKm || 0), 0);
+        return sum / standardSessionsWithPace.length;
       })
     );
   }

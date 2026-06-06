@@ -106,8 +106,11 @@
         <!-- Badges de Sincronização -->
         <div class="sync-status">
           <div class="sync-badge-row">
-            <span class="badge" [ngClass]="getSyncBadgeClass(session.syncStatus)">
-              {{ session.syncStatus === 'SYNCED' ? 'Sincronizado' : session.syncStatus === 'SYNC_PENDING' ? 'Pendente' : 'Erro' }}
+            <span class="badge" *ngIf="session.syncStatus === 'SYNCED'" [ngClass]="getSyncBadgeClass(session.syncStatus)">
+              Sincronizado
+            </span>
+            <span class="badge" *ngIf="session.syncStatus === 'ERROR'" [ngClass]="getSyncBadgeClass(session.syncStatus)">
+              Erro
             </span>
             <button class="btn-delete-session" (click)="deleteSession(session.clientSideUuid, $event)" title="Excluir Treino">
               🗑️
