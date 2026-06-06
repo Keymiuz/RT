@@ -1,0 +1,213 @@
+.list-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  gap: 20px;
+}
+
+.title {
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: #a0aec0;
+  font-size: 15px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 242, 254, 0.35);
+}
+
+.plus-icon {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Estado Vazio */
+.empty-state {
+  text-align: center;
+  background: rgba(26, 28, 35, 0.5);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 60px 40px;
+  max-width: 500px;
+  margin: 40px auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.empty-state h3 {
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: #a0aec0;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* Grid de Perfis */
+.profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.profile-card {
+  background: rgba(26, 28, 35, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 30px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 242, 254, 0.15);
+}
+
+.active-card {
+  border-color: #00f2fe;
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+  background: rgba(0, 242, 254, 0.04);
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+}
+
+.profile-name {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.meta-label {
+  color: #a0aec0;
+}
+
+.meta-value {
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.card-badge {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  background: rgba(0, 242, 254, 0.15);
+  border: 1px solid #00f2fe;
+  color: #00f2fe;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 15px;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: #4facfe;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+  padding: 0;
+}
+
+.btn-icon:hover {
+  color: #00f2fe;
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}

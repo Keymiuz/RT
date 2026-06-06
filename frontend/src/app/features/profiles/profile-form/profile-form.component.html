@@ -1,0 +1,68 @@
+<div class="form-container">
+  <div class="glass-card">
+    <h2 class="form-title">{{ isEditMode ? 'Editar Perfil' : 'Criar Novo Perfil' }}</h2>
+    <p class="form-subtitle">Cadastre os dados de performance individual para obter estimativas de precisão de pace e calorias.</p>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="reactive-form">
+      
+      <!-- Nome -->
+      <div class="form-group">
+        <label for="name">Nome do Corredor</label>
+        <input 
+          type="text" 
+          id="name" 
+          formControlName="name" 
+          placeholder="Ex: Jean" 
+          [class.input-error]="submitted && profileForm.get('name')?.invalid"
+        />
+        <div class="error-msg" *ngIf="submitted && profileForm.get('name')?.hasError('required')">
+          O nome é obrigatório.
+        </div>
+      </div>
+
+      <!-- Peso -->
+      <div class="form-group">
+        <label for="weightKg">Peso Corporal (kg)</label>
+        <input 
+          type="number" 
+          id="weightKg" 
+          formControlName="weightKg" 
+          placeholder="Ex: 75" 
+          [class.input-error]="submitted && profileForm.get('weightKg')?.invalid"
+        />
+        <div class="error-msg" *ngIf="submitted && profileForm.get('weightKg')?.hasError('required')">
+          O peso é obrigatório para estimar o gasto calórico.
+        </div>
+        <div class="error-msg" *ngIf="submitted && profileForm.get('weightKg')?.hasError('min')">
+          O peso mínimo aceito é de 10 kg.
+        </div>
+      </div>
+
+      <!-- Pace Alvo -->
+      <div class="form-group">
+        <label for="targetPace">Meta de Pace (min/km)</label>
+        <input 
+          type="number" 
+          id="targetPace" 
+          step="0.01"
+          formControlName="targetPace" 
+          placeholder="Ex: 5.30 (representa 5:30 por km)" 
+          [class.input-error]="submitted && profileForm.get('targetPace')?.invalid"
+        />
+        <div class="error-msg" *ngIf="submitted && profileForm.get('targetPace')?.hasError('required')">
+          A meta de ritmo (pace) é obrigatória.
+        </div>
+        <div class="error-msg" *ngIf="submitted && profileForm.get('targetPace')?.hasError('min')">
+          O pace mínimo aceito é 1.0 min/km.
+        </div>
+      </div>
+
+      <!-- Ações -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar Perfil</button>
+      </div>
+
+    </form>
+  </div>
+</div>

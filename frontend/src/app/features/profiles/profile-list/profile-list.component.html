@@ -1,0 +1,53 @@
+<div class="list-container">
+  <div class="list-header">
+    <div class="header-text">
+      <h2 class="title">Gerenciamento de Perfis</h2>
+      <p class="subtitle">Selecione, gerencie ou crie perfis de corredores para sincronizar e acompanhar metas.</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/profiles/new">
+      <span class="plus-icon">+</span> Novo Perfil
+    </button>
+  </div>
+
+  <!-- Estado Vazio -->
+  <div class="empty-state" *ngIf="profiles.length === 0">
+    <div class="empty-icon">👥</div>
+    <h3>Nenhum perfil cadastrado</h3>
+    <p>Para começar a registrar treinos de esteira e rua de precisão, crie o seu primeiro perfil de corredor.</p>
+    <button class="btn btn-primary" routerLink="/profiles/new">Criar Meu Primeiro Perfil</button>
+  </div>
+
+  <!-- Grid de Perfis -->
+  <div class="profiles-grid" *ngIf="profiles.length > 0">
+    <div 
+      class="profile-card" 
+      *ngFor="let profile of profiles" 
+      [class.active-card]="profile.id === activeProfileId"
+      (click)="selectProfile(profile.id)"
+    >
+      <div class="avatar">
+        {{ profile.name.charAt(0).toUpperCase() }}
+      </div>
+      
+      <div class="profile-info">
+        <h3 class="profile-name">{{ profile.name }}</h3>
+        <div class="meta-row">
+          <span class="meta-label">Peso:</span>
+          <span class="meta-value">{{ profile.weightKg }} kg</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Meta de Pace:</span>
+          <span class="meta-value">{{ profile.targetPace }} min/km</span>
+        </div>
+      </div>
+
+      <div class="card-badge" *ngIf="profile.id === activeProfileId">Ativo</div>
+
+      <div class="card-actions">
+        <button class="btn-icon" (click)="editProfile(profile.id, $event)" title="Editar Perfil">
+          ✏️ Editar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

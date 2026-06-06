@@ -1,0 +1,108 @@
+<div class="session-container">
+  <div class="glass-card">
+    <div class="mode-toggle">
+      <button type="button" class="btn-toggle" (click)="toggleManualMode()">
+        {{ isManualMode ? '⏱️ Usar Cronômetro' : '✍️ Registro Manual' }}
+      </button>
+    </div>
+
+    <h2 class="title">Corrida de Rua</h2>
+    <p class="subtitle">
+      {{ isManualMode ? 'Insira manualmente a duração e a distância da sua corrida de rua.' : 'Use o cronômetro para marcar a duração da sua corrida de rua e insira a distância percorrida no final.' }}
+    </p>
+
+    <!-- Display do Cronômetro -->
+    <div class="stopwatch-display" *ngIf="!isManualMode">
+      {{ formatTime(elapsedSeconds) }}
+    </div>
+
+    <!-- Controles do Cronômetro -->
+    <div class="stopwatch-controls" *ngIf="!isManualMode">
+      <button type="button" class="btn btn-reset" (click)="resetStopwatch()" [disabled]="elapsedSeconds === 0">
+        Resetar
+      </button>
+
+      <button type="button" class="btn btn-start" *ngIf="!isRunning" (click)="startStopwatch()">
+        🚀 Iniciar
+      </button>
+
+      <button type="button" class="btn btn-pause" *ngIf="isRunning" (click)="pauseStopwatch()">
+        ⏸️ Pausar
+      </button>
+    </div>
+
+    <div class="error-msg text-center" *ngIf="submitted && !isManualMode && elapsedSeconds === 0">
+      Você precisa iniciar o cronômetro e registrar algum tempo de corrida antes de salvar.
+    </div>
+
+    <!-- Formulário de Distância -->
+    <form [formGroup]="formGroup" (ngSubmit)="saveSession()" class="distance-form">
+      
+      <!-- Campos de Duração Manual -->
+      <div class="form-row-grid" *ngIf="isManualMode">
+        <div class="form-group">
+          <label for="durationMinutes">Minutos</label>
+          <input 
+            type="number" 
+            id="durationMinutes" 
+            formControlName="durationMinutes" 
+            placeholder="Min" 
+            [class.input-error]="submitted && formGroup.get('durationMinutes')?.invalid"
+          />
+          <div class="error-msg" *ngIf="submitted && formGroup.get('durationMinutes')?.hasError('required')">
+            Obrigatório.
+          </div>
+          <div class="error-msg" *ngIf="submitted && formGroup.get('durationMinutes')?.hasError('min')">
+            Mínimo 0.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="durationSeconds">Segundos</label>
+          <input 
+            type="number" 
+            id="durationSeconds" 
+            formControlName="durationSeconds" 
+            placeholder="Seg" 
+            [class.input-error]="submitted && formGroup.get('durationSeconds')?.invalid"
+          />
+          <div class="error-msg" *ngIf="submitted && formGroup.get('durationSeconds')?.hasError('required')">
+            Obrigatório.
+          </div>
+          <div class="error-msg" *ngIf="submitted && formGroup.get('durationSeconds')?.hasError('max')">
+            Máximo 59s.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="distanceKm">Distância Percorrida (km)</label>
+        <input 
+          type="number" 
+          id="distanceKm" 
+          step="0.01" 
+          formControlName="distanceKm" 
+          placeholder="Ex: 5.50" 
+          [class.input-error]="submitted && formGroup.get('distanceKm')?.invalid"
+        />
+        <div class="error-msg" *ngIf="submitted && formGroup.get('distanceKm')?.hasError('required')">
+          A distância percorrida é obrigatória.
+        </div>
+        <div class="error-msg" *ngIf="submitted && formGroup.get('distanceKm')?.hasError('min')">
+          A distância deve ser maior que 0.
+        </div>
+      </div>
+
+      <!-- Badge de Ritmo Estimado -->
+      <div class="pace-estimate-container" *ngIf="estimatedPace !== '0:00'">
+        <span class="pace-estimate-label">Ritmo (Pace) Estimado</span>
+        <span class="pace-estimate-value">⚡ {{ estimatedPace }} min/km</span>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/dashboard">Voltar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!isManualMode && elapsedSeconds === 0">Salvar Corrida</button>
+      </div>
+    </form>
+  </div>
+</div>

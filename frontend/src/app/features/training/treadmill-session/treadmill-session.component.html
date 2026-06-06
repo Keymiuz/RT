@@ -1,0 +1,98 @@
+<div class="session-container">
+  <div class="glass-card">
+    <h2 class="title">Treino de Esteira</h2>
+    <p class="subtitle">Insira manualmente os dados registrados no painel da máquina após finalizar a sua sessão de esteira.</p>
+
+    <form [formGroup]="formGroup" (ngSubmit)="saveSession()" class="reactive-form">
+      
+      <!-- Duração (Minutos e Segundos lado a lado) -->
+      <div class="form-row-grid">
+        <div class="form-group">
+          <label for="durationMinutes">Minutos</label>
+          <input 
+            type="number" 
+            id="durationMinutes" 
+            formControlName="durationMinutes" 
+            placeholder="Min" 
+            [class.input-error]="submitted && formGroup.get('durationMinutes')?.invalid"
+          />
+          <div class="error-msg" *ngIf="submitted && formGroup.get('durationMinutes')?.hasError('required')">
+            Obrigatório.
+          </div>
+          <div class="error-msg" *ngIf="submitted && formGroup.get('durationMinutes')?.hasError('min')">
+            Mínimo 1 min.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="durationSeconds">Segundos</label>
+          <input 
+            type="number" 
+            id="durationSeconds" 
+            formControlName="durationSeconds" 
+            placeholder="Seg" 
+            [class.input-error]="submitted && formGroup.get('durationSeconds')?.invalid"
+          />
+          <div class="error-msg" *ngIf="submitted && formGroup.get('durationSeconds')?.hasError('required')">
+            Obrigatório.
+          </div>
+          <div class="error-msg" *ngIf="submitted && formGroup.get('durationSeconds')?.hasError('max')">
+            Máximo 59s.
+          </div>
+        </div>
+      </div>
+
+      <!-- Distância -->
+      <div class="form-group">
+        <label for="distanceKm">Distância Total (km)</label>
+        <input 
+          type="number" 
+          id="distanceKm" 
+          step="0.01" 
+          formControlName="distanceKm" 
+          placeholder="Ex: 5.50" 
+          [class.input-error]="submitted && formGroup.get('distanceKm')?.invalid"
+        />
+        <div class="error-msg" *ngIf="submitted && formGroup.get('distanceKm')?.hasError('required')">
+          A distância é obrigatória.
+        </div>
+        <div class="error-msg" *ngIf="submitted && formGroup.get('distanceKm')?.hasError('min')">
+          Deve ser maior que 0.
+        </div>
+      </div>
+
+      <!-- Velocidade da Máquina -->
+      <div class="form-group">
+        <label for="speedKmh">Velocidade da Esteira (km/h) - Calculada automaticamente</label>
+        <input 
+          type="number" 
+          id="speedKmh" 
+          step="0.1" 
+          formControlName="speedKmh" 
+          placeholder="Calculada com base em tempo e distância" 
+          readonly
+          [class.input-error]="submitted && formGroup.get('speedKmh')?.invalid"
+        />
+        <div class="error-msg" *ngIf="submitted && formGroup.get('speedKmh')?.hasError('required')">
+          A velocidade configurada na máquina é obrigatória.
+        </div>
+        <div class="error-msg" *ngIf="submitted && formGroup.get('speedKmh')?.hasError('min')">
+          Deve ser no mínimo 1.0 km/h.
+        </div>
+      </div>
+
+      <!-- Badge de Ritmo Estimado -->
+      <div class="pace-estimate-container" *ngIf="estimatedPace !== '0:00'">
+        <span class="pace-estimate-label">Ritmo (Pace) Estimado</span>
+        <span class="pace-estimate-value">⚡ {{ estimatedPace }} min/km</span>
+      </div>
+
+      <!-- Ações -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/dashboard">Voltar</button>
+        <button type="submit" class="btn btn-primary">Salvar Treino</button>
+      </div>
+
+    </form>
+  </div>
+</div>

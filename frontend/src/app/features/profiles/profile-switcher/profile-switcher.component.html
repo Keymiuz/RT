@@ -1,0 +1,36 @@
+<div class="switcher-container">
+  <div class="active-profile-trigger" (click)="toggleDropdown()">
+    <div class="avatar-sm">
+      {{ activeProfile ? activeProfile.name.charAt(0).toUpperCase() : '?' }}
+    </div>
+    <span class="profile-name">
+      {{ activeProfile ? activeProfile.name : 'Selecione o corredor' }}
+    </span>
+    <span class="chevron" [class.chevron-up]="isOpen">▼</span>
+  </div>
+
+  <div class="dropdown-menu glass-card" *ngIf="isOpen">
+    <div class="dropdown-header">Alternar Corredor</div>
+    
+    <div class="dropdown-list">
+      <div 
+        class="dropdown-item" 
+        *ngFor="let profile of profiles" 
+        [class.active-item]="profile.id === activeProfile?.id"
+        (click)="selectProfile(profile.id)"
+      >
+        <div class="avatar-xs">
+          {{ profile.name.charAt(0).toUpperCase() }}
+        </div>
+        <span class="item-name">{{ profile.name }}</span>
+        <span class="checkmark" *ngIf="profile.id === activeProfile?.id">✓</span>
+      </div>
+    </div>
+
+    <div class="dropdown-footer">
+      <button class="btn-manage" routerLink="/profiles" (click)="isOpen = false">
+        👥 Gerenciar Perfis
+      </button>
+    </div>
+  </div>
+</div>
