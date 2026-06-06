@@ -1,72 +1,109 @@
 <div class="dashboard-container">
-  
-  <!-- Header do Dashboard com o Seletor de Perfil -->
-  <header class="dashboard-header">
-    <div class="header-welcome" *ngIf="activeProfile$ | async as profile">
-      <span class="greeting">Olá, corredor</span>
-      <h2 class="runner-name">{{ profile.name }}</h2>
+
+  <!-- Animated Background Orbs -->
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+
+  <!-- ===== HERO HEADER ===== -->
+  <header class="hero-header">
+    <div class="hero-content">
+      <div class="hero-text" *ngIf="activeProfile$ | async as profile">
+        <p class="hero-greeting">Pronto para correr, atleta?</p>
+        <h1 class="hero-name">{{ profile.name }}</h1>
+        <div class="hero-tagline">
+          <span class="pulse-dot"></span>
+          <span>Performance em tempo real</span>
+        </div>
+      </div>
+      <div class="hero-text" *ngIf="!(activeProfile$ | async)">
+        <p class="hero-greeting">Carregando dados...</p>
+        <h1 class="hero-name">—</h1>
+      </div>
+      <div class="hero-avatar">
+        <div class="avatar-ring">
+          <span class="avatar-emoji">🏃‍♂️</span>
+        </div>
+        <app-profile-switcher></app-profile-switcher>
+      </div>
     </div>
-    <div class="header-welcome" *ngIf="!(activeProfile$ | async)">
-      <span class="greeting">Carregando perfil...</span>
-    </div>
-    <app-profile-switcher></app-profile-switcher>
   </header>
 
-  <!-- Seção de Ações Rápidas -->
+  <!-- ===== STATS STRIP ===== -->
+  <section class="stats-strip" *ngIf="activeProfile$ | async as profile">
+    <div class="stat-pill">
+      <div class="stat-pill-icon">🏁</div>
+      <div class="stat-pill-body">
+        <span class="stat-pill-value">{{ (sessions$ | async)?.length || 0 }}</span>
+        <span class="stat-pill-label">Corridas</span>
+      </div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-pill">
+      <div class="stat-pill-icon">📍</div>
+      <div class="stat-pill-body">
+        <span class="stat-pill-value">{{ (totalDistance$ | async)?.toFixed(1) || '0.0' }}<small> km</small></span>
+        <span class="stat-pill-label">Distância Total</span>
+      </div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-pill highlighted">
+      <div class="stat-pill-icon">⚡</div>
+      <div class="stat-pill-body">
+        <span class="stat-pill-value">{{ formatPace((averagePace$ | async) ?? undefined) }}<small> min/km</small></span>
+        <span class="stat-pill-label">Ritmo Médio</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== QUICK ACTIONS ===== -->
   <section class="quick-actions">
-    <button class="action-card street" routerLink="/training/street">
-      <div class="action-icon">🏃‍♂️</div>
-      <div class="action-text">
-        <h3>Corrida de Rua</h3>
-        <p>Cronômetro ativo + entrada manual de distância</p>
-      </div>
-    </button>
-
-    <button class="action-card treadmill" routerLink="/training/treadmill">
-      <div class="action-icon">🏃‍♀️</div>
-      <div class="action-text">
-        <h3>Treino de Esteira</h3>
-        <p>Registro manual de dados do painel da esteira</p>
-      </div>
-    </button>
-  </section>
-
-  <!-- Cartões de Resumo / Estatísticas -->
-  <section class="stats-row" *ngIf="activeProfile$ | async as profile">
-    <div class="stat-card">
-      <span class="stat-icon">📈</span>
-      <div class="stat-data">
-        <span class="stat-value">{{ (sessions$ | async)?.length || 0 }}</span>
-        <span class="stat-label">Total de Corridas</span>
-      </div>
+    <div class="section-label">
+      <span class="section-label-line"></span>
+      <span>Registrar Treino</span>
+      <span class="section-label-line"></span>
     </div>
+    <div class="action-cards-grid">
+      <button class="action-card street" routerLink="/training/street">
+        <div class="action-card-glow street-glow"></div>
+        <div class="action-icon-wrap street-icon-bg">
+          <span class="action-icon">🛣️</span>
+        </div>
+        <div class="action-text">
+          <h3>Corrida de Rua</h3>
+          <p>Cronômetro de precisão + registro manual</p>
+        </div>
+        <div class="action-arrow">→</div>
+      </button>
 
-    <div class="stat-card">
-      <span class="stat-icon">🏁</span>
-      <div class="stat-data">
-        <span class="stat-value">{{ (totalDistance$ | async)?.toFixed(2) || '0.00' }} km</span>
-        <span class="stat-label">Distância Total</span>
-      </div>
-    </div>
-
-    <div class="stat-card highlighted">
-      <span class="stat-icon">⚡</span>
-      <div class="stat-data">
-        <span class="stat-value">{{ formatPace((averagePace$ | async) ?? undefined) }}</span>
-        <span class="stat-label">Ritmo Médio</span>
-      </div>
+      <button class="action-card treadmill" routerLink="/training/treadmill">
+        <div class="action-card-glow treadmill-glow"></div>
+        <div class="action-icon-wrap treadmill-icon-bg">
+          <span class="action-icon">🏋️</span>
+        </div>
+        <div class="action-text">
+          <h3>Treino de Esteira</h3>
+          <p>Dados do painel + cálculo automático</p>
+        </div>
+        <div class="action-arrow">→</div>
+      </button>
     </div>
   </section>
 
-  <!-- Gráfico de Evolução de Pace (Últimos Treinos) -->
-  <section class="dashboard-card" *ngIf="(chartSessions$ | async)?.length as count">
-    <h3 class="card-title">Evolução do Pace (Últimos Treinos)</h3>
-    <p class="card-subtitle">Barras mais altas indicam maior velocidade (menor tempo por quilômetro).</p>
-    
+  <!-- ===== PACE EVOLUTION CHART ===== -->
+  <section class="glass-card chart-section" *ngIf="(chartSessions$ | async)?.length as count">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">Evolução do Ritmo</h3>
+        <p class="card-subtitle">Barras mais altas = ritmo mais rápido (menor tempo/km)</p>
+      </div>
+      <div class="card-badge">Últimas {{ count }} corridas</div>
+    </div>
+
     <div class="evolution-chart">
       <div class="chart-bars">
-        <div 
-          class="chart-bar-wrapper" 
+        <div
+          class="chart-bar-wrapper"
           *ngFor="let session of (chartSessions$ | async)"
           [title]="'Data: ' + (session.createdAt | date:'dd/MM/yyyy') + ' | Distância: ' + session.distanceKm.toFixed(2) + ' km | Tempo: ' + formatDuration(session.durationSeconds) + ' | Pace: ' + formatPace(session.paceMinKm) + ' min/km | Calorias: ' + (session.burnedCalories?.toFixed(0) || '0') + ' kcal'"
         >
@@ -81,40 +118,38 @@
     </div>
   </section>
 
-  <!-- Histórico Recente de Atividades -->
-  <section class="dashboard-card">
-    <h3 class="card-title">Atividades Recentes</h3>
-    
+  <!-- ===== RECENT ACTIVITIES ===== -->
+  <section class="glass-card">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">Atividades Recentes</h3>
+        <p class="card-subtitle">Seus últimos registros de treino</p>
+      </div>
+    </div>
+
     <div class="sessions-list" *ngIf="(recentSessions$ | async)?.length as count; else noSessions">
-      <div class="session-item" *ngFor="let session of (recentSessions$ | async)">
+      <div class="session-item" *ngFor="let session of (recentSessions$ | async); let i = index" [style.animation-delay]="i * 0.05 + 's'">
         <div class="session-type-icon" [class.street-icon]="session.type === 'RUA'">
-          {{ session.type === 'RUA' ? '🛣️' : '🎰' }}
+          {{ session.type === 'RUA' ? '🛣️' : '🏋️' }}
         </div>
-        
+
         <div class="session-details">
           <div class="session-main">
             <span class="session-dist">{{ session.distanceKm.toFixed(2) }} km</span>
-            <span class="session-type-text">{{ session.type === 'RUA' ? 'Rua' : 'Esteira' }}</span>
+            <span class="session-type-chip" [class.chip-street]="session.type === 'RUA'">{{ session.type === 'RUA' ? 'Rua' : 'Esteira' }}</span>
           </div>
           <div class="session-meta">
-            <span>🕒 {{ formatDuration(session.durationSeconds) }}</span>
-            <span *ngIf="session.paceMinKm">⚡ {{ formatPace(session.paceMinKm) }} min/km</span>
-            <span *ngIf="session.burnedCalories">🔥 {{ session.burnedCalories.toFixed(0) }} kcal</span>
+            <span class="meta-chip">🕒 {{ formatDuration(session.durationSeconds) }}</span>
+            <span class="meta-chip" *ngIf="session.paceMinKm">⚡ {{ formatPace(session.paceMinKm) }}/km</span>
+            <span class="meta-chip" *ngIf="session.burnedCalories">🔥 {{ session.burnedCalories.toFixed(0) }} kcal</span>
           </div>
         </div>
 
-        <!-- Badges de Sincronização -->
         <div class="sync-status">
           <div class="sync-badge-row">
-            <span class="badge" *ngIf="session.syncStatus === 'SYNCED'" [ngClass]="getSyncBadgeClass(session.syncStatus)">
-              Sincronizado
-            </span>
-            <span class="badge" *ngIf="session.syncStatus === 'ERROR'" [ngClass]="getSyncBadgeClass(session.syncStatus)">
-              Erro
-            </span>
-            <button class="btn-delete-session" (click)="deleteSession(session.clientSideUuid, $event)" title="Excluir Treino">
-              🗑️
-            </button>
+            <span class="badge" *ngIf="session.syncStatus === 'SYNCED'" [ngClass]="getSyncBadgeClass(session.syncStatus)">✓ Sync</span>
+            <span class="badge" *ngIf="session.syncStatus === 'ERROR'" [ngClass]="getSyncBadgeClass(session.syncStatus)">⚠ Erro</span>
+            <button class="btn-delete-session" (click)="deleteSession(session.clientSideUuid, $event)" title="Excluir Treino">🗑️</button>
           </div>
           <span class="session-date">{{ session.createdAt | date:'dd/MM HH:mm' }}</span>
         </div>
@@ -123,21 +158,22 @@
 
     <ng-template #noSessions>
       <div class="no-data">
-        <p>Nenhuma corrida registrada para este perfil.</p>
-        <p class="hint">Use um dos botões de ações rápidas acima para registrar o seu primeiro treino!</p>
+        <div class="no-data-icon">🏁</div>
+        <p class="no-data-title">Nenhuma corrida registrada</p>
+        <p class="no-data-hint">Use os botões acima para registrar o seu primeiro treino!</p>
       </div>
     </ng-template>
   </section>
 
-  <!-- Floating Action Button (FAB) para o Quick-Log de 5.5km -->
-  <button 
-    class="fab-quick-log" 
-    [routerLink]="['/training/street']" 
-    [queryParams]="{ distanceKm: 5.5 }"
-    title="Registrar Corrida de 5.5km Rapidamente"
-  >
-    <span class="fab-icon">⚡</span>
-    <span class="fab-text">Quick-Log 5.5km</span>
-  </button>
-
 </div>
+
+<!-- Floating Action Button (FAB) para o Quick-Log de 5.5km -->
+<button
+  class="fab-quick-log"
+  [routerLink]="['/training/street']"
+  [queryParams]="{ distanceKm: 5.5 }"
+  title="Registrar Corrida de 5.5km Rapidamente"
+>
+  <span class="fab-icon">⚡</span>
+  <span class="fab-text">Quick-Log 5.5km</span>
+</button>

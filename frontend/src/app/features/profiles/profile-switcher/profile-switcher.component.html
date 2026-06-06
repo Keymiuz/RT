@@ -9,13 +9,17 @@
     <span class="chevron" [class.chevron-up]="isOpen">▼</span>
   </div>
 
-  <div class="dropdown-menu glass-card" *ngIf="isOpen">
+  <!-- Dropdown com position:fixed para escapar de stacking contexts de backdrop-filter -->
+  <div
+    class="dropdown-menu switcher-dropdown-panel"
+    *ngIf="isOpen"
+  >
     <div class="dropdown-header">Alternar Corredor</div>
-    
+
     <div class="dropdown-list">
-      <div 
-        class="dropdown-item" 
-        *ngFor="let profile of profiles" 
+      <div
+        class="dropdown-item"
+        *ngFor="let profile of profiles"
         [class.active-item]="profile.id === activeProfile?.id"
         (click)="selectProfile(profile.id)"
       >

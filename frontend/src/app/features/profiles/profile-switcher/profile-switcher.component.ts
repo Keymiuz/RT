@@ -17,6 +17,8 @@ export class ProfileSwitcherComponent implements OnInit {
   activeProfile: LocalProfile | null = null;
   isOpen = false;
 
+
+
   constructor(
     private dbService: DatabaseService,
     private profileState: ProfileStateService,
@@ -44,11 +46,13 @@ export class ProfileSwitcherComponent implements OnInit {
     this.isOpen = false;
   }
 
-  // Fecha o dropdown reativamente caso o usuário clique fora do componente
+  // Fecha o dropdown caso o usuário clique fora do componente
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.isOpen = false;
     }
   }
+
+
 }

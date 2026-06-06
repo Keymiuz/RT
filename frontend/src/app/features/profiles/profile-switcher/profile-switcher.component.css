@@ -52,21 +52,25 @@
   transform: rotate(180deg);
 }
 
-/* Menu Dropdown */
-.dropdown-menu {
-  position: absolute;
-  top: calc(100% + 10px);
+/* Menu Dropdown — position:fixed escapes ALL stacking contexts */
+.dropdown-menu,
+.switcher-dropdown-panel {
+  position: absolute;       /* positioned relative to .switcher-container */
+  top: 100%;
   right: 0;
+  margin-top: 8px;
   width: 250px;
-  background: rgba(26, 28, 35, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  padding: 8px 0;
-  animation: dropDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(18, 20, 28, 0.98) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255,255,255,0.04) !important;
+  z-index: 99999;           /* acima de absolutamente tudo */
+  padding: 8px 0 !important;
+  animation: dropDown 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: top right;
 }
 
