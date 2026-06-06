@@ -18,8 +18,9 @@ import { ProfileSwitcherComponent } from '../../profiles/profile-switcher/profil
 export class TrainingDashboardComponent implements OnInit {
   activeProfile$: Observable<LocalProfile | null>;
   sessions$: Observable<LocalSession[]>;
-  standardSessions$: Observable<LocalSession[]>;
   recentSessions$: Observable<LocalSession[]>;
+  chartSessions$: Observable<LocalSession[]>;
+  totalDistance$: Observable<number>;
   averagePace$: Observable<number>;
 
   constructor(
@@ -38,23 +39,31 @@ export class TrainingDashboardComponent implements OnInit {
       map(sessions => sessions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     );
 
-    // Filtra sessões do circuito padrão 5.5km (considera novas calculadas e históricas com distância 5.5km)
-    this.standardSessions$ = this.sessions$.pipe(
-      map(sessions => sessions.filter(s => s.isStandardCircuit || s.distanceKm === 5.5))
+    // Distância total acumulada de todas as sessões
+    this.totalDistance$ = this.sessions$.pipe(
+      map(sessions => sessions.reduce((acc, s) => acc + (s.distanceKm || 0), 0))
     );
 
-    // Últimos 5 treinos
+    // Últimos 5 treinos para a listagem
     this.recentSessions$ = this.sessions$.pipe(
       map(sessions => sessions.slice(0, 5))
     );
 
-    // Calcula o ritmo médio do circuito de 5.5km
-    this.averagePace$ = this.standardSessions$.pipe(
+    // Treinos para o gráfico de evolução (até 10 treinos com ritmo válidos, ordenados do mais antigo ao mais recente)
+    this.chartSessions$ = this.sessions$.pipe(
       map(sessions => {
-        const standardSessionsWithPace = sessions.filter(s => s.paceMinKm !== undefined && s.paceMinKm > 0);
-        if (standardSessionsWithPace.length === 0) return 0;
-        const sum = standardSessionsWithPace.reduce((acc, s) => acc + (s.paceMinKm || 0), 0);
-        return sum / standardSessionsWithPace.length;
+        const withPace = sessions.filter(s => s.paceMinKm !== undefined && s.paceMinKm > 0);
+        return withPace.slice(0, 10).reverse();
+      })
+    );
+
+    // Calcula o ritmo médio geral de todas as sessões
+    this.averagePace$ = this.sessions$.pipe(
+      map(sessions => {
+        const sessionsWithPace = sessions.filter(s => s.paceMinKm !== undefined && s.paceMinKm > 0);
+        if (sessionsWithPace.length === 0) return 0;
+        const sum = sessionsWithPace.reduce((acc, s) => acc + (s.paceMinKm || 0), 0);
+        return sum / sessionsWithPace.length;
       })
     );
   }

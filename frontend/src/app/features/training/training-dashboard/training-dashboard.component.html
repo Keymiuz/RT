@@ -44,8 +44,8 @@
     <div class="stat-card">
       <span class="stat-icon">🏁</span>
       <div class="stat-data">
-        <span class="stat-value">{{ (standardSessions$ | async)?.length || 0 }}</span>
-        <span class="stat-label">Circuitos de 5.5km</span>
+        <span class="stat-value">{{ (totalDistance$ | async)?.toFixed(2) || '0.00' }} km</span>
+        <span class="stat-label">Distância Total</span>
       </div>
     </div>
 
@@ -53,22 +53,22 @@
       <span class="stat-icon">⚡</span>
       <div class="stat-data">
         <span class="stat-value">{{ formatPace((averagePace$ | async) ?? undefined) }}</span>
-        <span class="stat-label">Ritmo Médio (5.5km)</span>
+        <span class="stat-label">Ritmo Médio</span>
       </div>
     </div>
   </section>
 
-  <!-- Gráfico de Evolução de Pace (Apenas Circuitos 5.5km) -->
-  <section class="dashboard-card" *ngIf="(standardSessions$ | async)?.length as count">
-    <h3 class="card-title">Evolução do Pace no Circuito de 5.5km</h3>
+  <!-- Gráfico de Evolução de Pace (Últimos Treinos) -->
+  <section class="dashboard-card" *ngIf="(chartSessions$ | async)?.length as count">
+    <h3 class="card-title">Evolução do Pace (Últimos Treinos)</h3>
     <p class="card-subtitle">Barras mais altas indicam maior velocidade (menor tempo por quilômetro).</p>
     
     <div class="evolution-chart">
       <div class="chart-bars">
         <div 
           class="chart-bar-wrapper" 
-          *ngFor="let session of (standardSessions$ | async)"
-          [title]="'Data: ' + (session.createdAt | date:'dd/MM/yyyy') + ' | Tempo: ' + formatDuration(session.durationSeconds) + ' | Pace: ' + formatPace(session.paceMinKm) + ' min/km | Calorias: ' + (session.burnedCalories?.toFixed(0) || '0') + ' kcal'"
+          *ngFor="let session of (chartSessions$ | async)"
+          [title]="'Data: ' + (session.createdAt | date:'dd/MM/yyyy') + ' | Distância: ' + session.distanceKm.toFixed(2) + ' km | Tempo: ' + formatDuration(session.durationSeconds) + ' | Pace: ' + formatPace(session.paceMinKm) + ' min/km | Calorias: ' + (session.burnedCalories?.toFixed(0) || '0') + ' kcal'"
         >
           <div class="chart-bar-container">
             <div class="chart-bar" [style.height.%]="getPacePercentage(session.paceMinKm)">
